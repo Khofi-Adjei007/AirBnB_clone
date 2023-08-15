@@ -1,288 +1,84 @@
 #!/usr/bin/python3
+"""Module for the entry point of the command interpreter."""
 
-"""Unittests for models/place.py.
-Unittest classes:
-    TestPlace_to_dict
-    TestPlace_save
-    TestPlace_instantiation
-"""
-
-import unittest
-from models.place import Place
-from time import sleep
-from datetime import datetime
-import models
-import os
+import cmd  # Importing the cmd module for creating a command-line interpreter
+import re   # Importing the re module for regular expression matching
+import json  # Importing the json module for JSON parsing and manipulation
+from models import storage  # Importing the storage module for data storage
+from models.base_model import BaseModel  # Importing the BaseModel class
 
 
-class TestPlace_to_dict(unittest.TestCase):
+class HBNBCommand(cmd.Cmd):
 
-    """Unittests for testing to_dict method of the Place class."""
+    """Class for the command interpreter."""
 
-    def test_to_dict_type(self):
-        """Test that to_dict() returns a dictionary."""
-        self.assertTrue(dict, type(Place().to_dict()))
+    prompt = "(hbnb) "  # Setting the command prompt
 
-    def test_to_dict_contains_correct_keys(self):
-        """Test that dictionary contains the correct keys."""
-        pl = Place()
-        self.assertIn("id", pl.to_dict())
-        self.assertIn("created_at", pl.to_dict())
-        self.assertIn("updated_at", pl.to_dict())
-        self.assertIn("__class__", pl.to_dict())
+    def default(self, line):
+        """Catch commands if nothing else matches then."""
+        self._precmd(line)
 
-    def test_to_dict_contains_added_attributes(self):
-        """Test that dictionary contains added attributes."""
-        pl = Place()
-        pl.middle_name = "Holberton"
-        pl.my_number = 98
-        self.assertEqual("Holberton", pl.middle_name)
-        self.assertIn("my_number", pl.to_dict())
+    def _precmd(self, line):
+        """Intercepts commands to test for class.syntax()"""
+        # ...
+        # This method seems to handle parsing and
+        # executing custom commands.
+        # It extracts class name, method, arguments,
+        # and attributes from the command string.
 
-    def test_to_dict_datetime_attributes_are_strs(self):
-        """Test that datetime attributes in dictionary are strings."""
-        pl = Place()
-        pl_dict = pl.to_dict()
-        self.assertEqual(str, type(pl_dict["id"]))
-        self.assertEqual(str, type(pl_dict["created_at"]))
-        self.assertEqual(str, type(pl_dict["updated_at"]))
+    def update_dict(self, classname, uid, s_dict):
+        """Helper method for update() with a dictionary."""
+        # ...
+        # This method seems to handle updating instances
+        # using a dictionary of attributes.
 
-    def test_to_dict_output(self):
-        """Test the output of to_dict() method."""
-        dt = datetime.today()
-        pl = Place()
-        pl.id = "123456"
-        pl.created_at = pl.updated_at = dt
-        tdict = {
-            'id': '123456',
-            '__class__': 'Place',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat(),
-        }
-        self.assertDictEqual(pl.to_dict(), tdict)
+    def do_EOF(self, line):
+        """Handles End Of File character."""
+        print()  # Print a newline for visual clarity
+        return True
+        # Return True to exit the command loop (EOF signals program end)
 
-    def test_contrast_to_dict_dunder_dict(self):
-        """Test contrast between to_dict() and __dict__."""
-        pl = Place()
-        self.assertNotEqual(pl.to_dict(), pl.__dict__)
+    def do_quit(self, line):
+        """Exits the program."""
+        return True  # Return True to exit the command loop
 
-    def test_to_dict_with_arg(self):
-        """Test to_dict() with an argument."""
-        pl = Place()
-        with self.assertRaises(TypeError):
-            pl.to_dict(None)
+    def emptyline(self):
+        """Doesn't do anything on ENTER."""
+        pass  # Do nothing when an empty line is entered
 
+    def do_create(self, line):
+        """Creates an instance."""
+        # ...
+        # This method seems to create instances of specified classes.
 
-class TestPlace_save(unittest.TestCase):
-    """Unittests for testing save method of the Place class."""
+    def do_show(self, line):
+        """Prints the string representation of an instance."""
+        # ...
+        # This method seems to print the string
+        # representation of instances based on their IDs.
 
-    @classmethod
-    def setUp(self):
-        """Set up before each test."""
-        try:
-            os.rename("file.json", "tmp")
-        except IOError:
-            pass
+    def do_destroy(self, line):
+        """Deletes an instance based on the class name and id."""
+        # ...
+        # This method seems to delete instances based on class name and ID.
 
-    @classmethod
-    def tearDown(self):
-        """Tear down after each test."""
-        try:
-            os.remove("file.json")
-        except IOError:
-            pass
-        try:
-            os.rename("tmp", "file.json")
-        except IOError:
-            pass
+    def do_all(self, line):
+        """Prints all string representation of all instances."""
+        # ...
+        # This method seems to print string representations of
+        # all instances or instances of a specific class.
 
-    def test_one_save(self):
-        """Test one save."""
-        pl = Place()
-        sleep(0.05)
-        first_updated_at = pl.updated_at
-        pl.save()
-        self.assertLess(first_updated_at, pl.updated_at)
+    def do_count(self, line):
+        """Counts the instances of a class."""
+        # ...
+        # This method seems to count instances of a specified class.
 
-    def test_two_saves(self):
-        """Test two saves."""
-        pl = Place()
-        sleep(0.05)
-        first_updated_at = pl.updated_at
-        pl.save()
-        second_updated_at = pl.updated_at
-        self.assertLess(first_updated_at, second_updated_at)
-        sleep(0.05)
-        pl.save()
-        self.assertLess(second_updated_at, pl.updated_at)
-
-    def test_save_with_arg(self):
-        """Test save method with an argument."""
-        pl = Place()
-        with self.assertRaises(TypeError):
-            pl.save(None)
-
-    def test_save_updates_file(self):
-        """Test that save updates the file."""
-        pl = Place()
-        pl.save()
-        plid = "Place." + pl.id
-        with open("file.json", "r") as f:
-            self.assertIn(plid, f.read())
+    def do_update(self, line):
+        """Updates an instance by adding or updating attribute."""
+        # ...
+        # This method seems to update instance attributes.
 
 
-class TestPlace_instantiation(unittest.TestCase):
-    """Unittests for testing instantiation of the Place class."""
-
-    def test_no_args_instantiates(self):
-        """Test instantiation with no arguments."""
-        self.assertEqual(Place, type(Place()))
-
-    def test_new_instance_stored_in_objects(self):
-        """Test that new instance is stored in objects."""
-        self.assertIn(Place(), models.storage.all().values())
-
-    def test_id_is_public_str(self):
-        """Test that id is a public string attribute."""
-        self.assertEqual(str, type(Place().id))
-
-    def test_created_at_is_public_datetime(self):
-        """Test that created_at is a public datetime attribute."""
-        self.assertEqual(datetime, type(Place().created_at))
-
-    def test_updated_at_is_public_datetime(self):
-        """Test that updated_at is a public datetime attribute."""
-        self.assertEqual(datetime, type(Place().updated_at))
-
-    def test_city_id_is_public_class_attribute(self):
-        """Test that city_id is a public class attribute."""
-        pl = Place()
-        self.assertEqual(str, type(Place.city_id))
-        self.assertIn("city_id", dir(pl))
-        self.assertNotIn("city_id", pl.__dict__)
-
-    def test_user_id_is_public_class_attribute(self):
-        """Test that user_id is a public class attribute."""
-        pl = Place()
-        self.assertEqual(str, type(Place.user_id))
-        self.assertIn("user_id", dir(pl))
-        self.assertNotIn("user_id", pl.__dict__)
-
-    def test_name_is_public_class_attribute(self):
-        """Test that name is a public class attribute."""
-        pl = Place()
-        self.assertEqual(str, type(Place.name))
-        self.assertIn("name", dir(pl))
-        self.assertNotIn("name", pl.__dict__)
-
-    def test_description_is_public_class_attribute(self):
-        """Test that description is a public class attribute."""
-        pl = Place()
-        self.assertEqual(str, type(Place.description))
-        self.assertIn("description", dir(pl))
-        self.assertNotIn("desctiption", pl.__dict__)
-
-    def test_number_rooms_is_public_class_attribute(self):
-        """Test that number_rooms is a public class attribute."""
-        pl = Place()
-        self.assertEqual(int, type(Place.number_rooms))
-        self.assertIn("number_rooms", dir(pl))
-        self.assertNotIn("number_rooms", pl.__dict__)
-
-    def test_number_bathrooms_is_public_class_attribute(self):
-        """Test that number_bathrooms is a public class attribute."""
-        pl = Place()
-        self.assertEqual(int, type(Place.number_bathrooms))
-        self.assertIn("number_bathrooms", dir(pl))
-        self.assertNotIn("number_bathrooms", pl.__dict__)
-
-    def test_max_guest_is_public_class_attribute(self):
-        """Test that max_guest is a public class attribute."""
-        pl = Place()
-        self.assertEqual(int, type(Place.max_guest))
-        self.assertIn("max_guest", dir(pl))
-        self.assertNotIn("max_guest", pl.__dict__)
-
-    def test_price_by_night_is_public_class_attribute(self):
-        """Test that price_by_night is a public class attribute."""
-        pl = Place()
-        self.assertEqual(int, type(Place.price_by_night))
-        self.assertIn("price_by_night", dir(pl))
-        self.assertNotIn("price_by_night", pl.__dict__)
-
-    def test_latitude_is_public_class_attribute(self):
-        """Test that latitude is a public class attribute."""
-        pl = Place()
-        self.assertEqual(float, type(Place.latitude))
-        self.assertIn("latitude", dir(pl))
-        self.assertNotIn("latitude", pl.__dict__)
-
-    def test_longitude_is_public_class_attribute(self):
-        """Test that longitude is a public class attribute."""
-        pl = Place()
-        self.assertEqual(float, type(Place.longitude))
-        self.assertIn("longitude", dir(pl))
-        self.assertNotIn("longitude", pl.__dict__)
-
-    def test_amenity_ids_is_public_class_attribute(self):
-        """Test that amenity_ids is a public class attribute."""
-        pl = Place()
-        self.assertEqual(list, type(Place.amenity_ids))
-        self.assertIn("amenity_ids", dir(pl))
-        self.assertNotIn("amenity_ids", pl.__dict__)
-
-    def test_two_places_unique_ids(self):
-        """Test that two places have unique ids."""
-        pl1 = Place()
-        pl2 = Place()
-        self.assertNotEqual(pl1.id, pl2.id)
-
-    def test_two_places_different_created_at(self):
-        """Test that two places have different created_at."""
-        pl1 = Place()
-        sleep(0.05)
-        pl2 = Place()
-        self.assertLess(pl1.created_at, pl2.created_at)
-
-    def test_two_places_different_updated_at(self):
-        """Test that two places have different updated_at."""
-        pl1 = Place()
-        sleep(0.05)
-        pl2 = Place()
-        self.assertLess(pl1.updated_at, pl2.updated_at)
-
-    def test_str_representation(self):
-        """Test the string representation of Place."""
-        dt = datetime.today()
-        dt_repr = repr(dt)
-        pl = Place()
-        pl.id = "123456"
-        pl.created_at = pl.updated_at = dt
-        plstr = pl.__str__()
-        self.assertIn("[Place] (123456)", plstr)
-        self.assertIn("'id': '123456'", plstr)
-        self.assertIn("'created_at': " + dt_repr, plstr)
-        self.assertIn("'updated_at': " + dt_repr, plstr)
-
-    def test_args_unused(self):
-        """Test that unused args are not added to __dict__."""
-        pl = Place(None)
-        self.assertNotIn(None, pl.__dict__.values())
-
-    def test_instantiation_with_kwargs(self):
-        """Test instantiation with keyword arguments."""
-        dt = datetime.today()
-        dt_iso = dt.isoformat()
-        pl = Place(id="345", created_at=dt_iso, updated_at=dt_iso)
-        self.assertEqual(pl.id, "345")
-        self.assertEqual(pl.created_at, dt)
-        self.assertEqual(pl.updated_at, dt)
-
-    def test_instantiation_with_None_kwargs(self):
-        """Test instantiation with None keyword arguments."""
-        with self.assertRaises(TypeError):
-            Place(id=None, created_at=None, updated_at=None)
-
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
+    # Instantiate the HBNBCommand class and start the command loop
