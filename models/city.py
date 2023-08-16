@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-"""Module defining the City class."""
+"""City Class Definition"""
 
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
 
-    """A class representing city objects for management."""
+    """Class representing city objects"""
 
-    state_id = ""  # Placeholder for the state ID with the city
-    name = ""  # Placeholder for the city name
+    # Initialize the state_id and name attributes
+    state_id = ""
+    name = ""

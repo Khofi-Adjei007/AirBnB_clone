@@ -1,11 +1,9 @@
 #!/usr/bin/python3
-
-"""Entry point for package initialization."""
-
+"""Package Initialization"""
 from models.engine.file_storage import FileStorage
 
-# Initialize the FileStorage instance for data management
+# Instantiate the FileStorage class
 storage = FileStorage()
 
-# Reload data from storage to populate the instance
-storage.reload()i
+# Load data using the reload method
+storage.reload()

@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-"""Module defining the State class."""
+"""State Class Definition"""
 
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
 
-    """A class representing state objects for management."""
+    """Class representing state objects"""
 
-    name = ""  # Placeholder for the state name
+    # Initialize the name attribute
+    name = ""

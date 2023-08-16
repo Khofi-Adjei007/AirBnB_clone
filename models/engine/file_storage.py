@@ -1,42 +1,43 @@
 #!/usr/bin/python3
-"""Module for the FileStorage class."""
-import os
-import json
-import datetime
 
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
+"""FileStorage class module."""
+import datetime
+import json
+import os
 
 
 class FileStorage:
 
-    """A class for storing and retrieving data."""
+    """Class for managing data storage and retrieval"""
 
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """Return the dictionary __objects."""
+        """Retrieve the dictionary __objects"""
         return FileStorage.__objects
 
     def new(self, obj):
-        """Set in __objects the obj with key <obj class name>.id."""
+        """Add obj to __objects using <obj class name>.id as key"""
         key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
     def save(self):
-        """Serialize __objects to the JSON file (path: __file_path)."""
+        """Serialize __objects to JSON file at __file_path"""
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
 
     def classes(self):
-        """Return a dictionary of valid classes and their references."""
+        """Return a dictionary of valid classes and their references"""
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
+
         classes = {"BaseModel": BaseModel,
                    "User": User,
                    "State": State,
@@ -47,18 +48,18 @@ class FileStorage:
         return classes
 
     def reload(self):
-        """Reload the stored objects."""
+        """Reload stored objects from JSON file"""
         if not os.path.isfile(FileStorage.__file_path):
             return
         with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
             obj_dict = json.load(f)
             obj_dict = {k: self.classes()[v["__class__"]](**v)
                         for k, v in obj_dict.items()}
-            # TODO: should this overwrite or insert?
+            # TODO: Decide whether to overwrite or insert
             FileStorage.__objects = obj_dict
 
     def attributes(self):
-        """Return the valid attributes and their types for classname."""
+        """Return valid attributes and their types for each classname"""
         attributes = {
             "BaseModel":
                 {"id": str,

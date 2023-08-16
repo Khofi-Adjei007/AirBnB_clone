@@ -1,24 +1,22 @@
 #!/usr/bin/python3
-"""This module defines the BaseModel class."""
+"""Base model implementation for the project"""
 
-from datetime import datetime
 import uuid
+from datetime import datetime
 from models import storage
 
 
 class BaseModel:
 
-    """A class that serves as the base for other classes to inherit."""
+    """The fundamental class from which all other classes inherit"""
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialize instance attributes.
+        """Initialize instance attributes
 
         Args:
-            *args: list of arguments
-            **kwargs: dict of key-value arguments
+            *args: List of arguments
+            **kwargs: Dictionary of key-value arguments
         """
-
         if kwargs and kwargs != {}:
             for key in kwargs:
                 if key == "created_at":
@@ -36,17 +34,23 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        """Return official string representation."""
-        return "[{}] ({}) {}".\
-            format(type(self).__name__, self.id, self.__dict__)
+        """Return the official string representation"""
+
+        return ("[{}] ({}) {}"
+                .format(type(self).__name__, self.id, self.__dict__))
 
     def save(self):
-        """Update the public instance attribute updated_at."""
+        """Update the public instance attribute 'updated_at'"""
+
         self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
-        """Return a dictionary containing all keys/values of __dict__."""
+        """
+        Return a dictionary containing
+        all keys/values of __dict__
+        """
+
         my_dict = self.__dict__.copy()
         my_dict["__class__"] = type(self).__name__
         my_dict["created_at"] = my_dict["created_at"].isoformat()

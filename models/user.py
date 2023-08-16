@@ -1,14 +1,15 @@
 #!/usr/bin/python3
-"""Module defining the User class."""
+"""User Class Definition"""
 
 from models.base_model import BaseModel
 
 
 class User(BaseModel):
 
-    """A class representing user objects for management."""
+    """Class representing user objects"""
 
-    email = ""  # Placeholder for the user's email
-    password = ""  # Placeholder for the user's password
-    first_name = ""  # Placeholder for the user's first name
-    last_name = ""  # Placeholder for the user's last name
+    # Initialize attributes for user details
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""

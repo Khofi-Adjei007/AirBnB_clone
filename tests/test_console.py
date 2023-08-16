@@ -11,58 +11,30 @@ Unittest classes:
     TestHBNBCommand_destroy
     TestHBNBCommand_update
 """
-
-# Importing standard modules for unittest and file operations
 import os
 import sys
 import unittest
-
-# Importing StringIO for capturing console output during tests
-from io import StringIO
-
-# Importing unittest.mock for patching input and output streams
-from unittest.mock import patch
-
-# Importing models' storage module for managing data
 from models import storage
-
-# Importing the FileStorage class for data storage and retrieval
 from models.engine.file_storage import FileStorage
-
-# Importing the HBNBCommand class from console.py for testing
 from console import HBNBCommand
+from io import StringIO
+from unittest.mock import patch
 
 
 class TestHBNBCommand_prompting(unittest.TestCase):
-    
-    """
-    Unittests for testing prompting
-    of the HBNB command interpreter.
-    """
+    """Unittests for testing prompting of the HBNB command interpreter."""
 
     def test_prompt_string(self):
-        # Testing if the prompt string
-        # matches the expected value
         self.assertEqual("(hbnb) ", HBNBCommand.prompt)
 
     def test_empty_line(self):
-        # Testing the behavior of the command
-        # interpreter when given an empty line
         with patch("sys.stdout", new=StringIO()) as output:
-            # Redirecting the stdout to capture the
-            # console output during the test
             self.assertFalse(HBNBCommand().onecmd(""))
-            # Simulating an empty line input
-            self.assertEqual("", output.getvalue().strip()) 
-            # Checking if the console output is empty
+            self.assertEqual("", output.getvalue().strip())
 
 
 class TestHBNBCommand_help(unittest.TestCase):
-    
-    """
-    Unittests for testing help messages
-    of the HBNB command interpreter.
-    """
+    """Unittests for testing help messages of the HBNB command interpreter."""
 
     def test_help_quit(self):
         h = "Quit command to exit the program."
@@ -131,6 +103,8 @@ class TestHBNBCommand_help(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help"))
             self.assertEqual(h, output.getvalue().strip())
+
+
 class TestHBNBCommand_exit(unittest.TestCase):
     """Unittests for testing exiting from the HBNB command interpreter."""
 
@@ -223,6 +197,8 @@ class TestHBNBCommand_create(unittest.TestCase):
             self.assertLess(0, len(output.getvalue().strip()))
             testKey = "Review.{}".format(output.getvalue().strip())
             self.assertIn(testKey, storage.all().keys())
+
+
 class TestHBNBCommand_show(unittest.TestCase):
     """Unittests for testing show from the HBNB command interpreter"""
 
