@@ -1,0 +1,19 @@
+/* Reset some default styles */
+body,
+h1,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* General styles */
+body {
+    margin: 0;
+    padding: 0;
+    color: #484848;
+    font-size: 14px;
+    font-family: "Circular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
